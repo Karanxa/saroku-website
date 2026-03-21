@@ -1,0 +1,244 @@
+@import "tailwindcss";
+
+/* ─── Light theme (default) ──────────────────────────────────────────────── */
+:root {
+  --bg:          #F8F8FF;
+  --surface:     #FFFFFF;
+  --surface-2:   #F9FAFB;
+  --surface-3:   #F3F4F6;
+  --border:      #E5E7EB;
+  --border-2:    #F3F4F6;
+  --text:        #111827;
+  --text-2:      #374151;
+  --muted:       #6B7280;
+  --subtle:      #9CA3AF;
+
+  --primary:     #6366F1;
+  --primary-h:   #4F46E5;
+  --primary-t:   #EEF2FF;
+  --primary-b:   #C7D2FE;
+  --primary-l:   #4F46E5;
+  --primary-la:  #A5B4FC;
+
+  --danger:      #EF4444;
+  --danger-t:    #FEE2E2;
+  --danger-b:    #FECACA;
+  --warning:     #F59E0B;
+  --warning-t:   #FEF9C3;
+  --warning-b:   #FDE68A;
+  --success:     #22C55E;
+  --success-t:   #DCFCE7;
+  --code-bg:     #1E1E2E;
+}
+
+/* ─── Dark theme ─────────────────────────────────────────────────────────── */
+html[data-theme="dark"] {
+  --bg:          #0C0C13;
+  --surface:     #14141D;
+  --surface-2:   #101018;
+  --surface-3:   #1C1C27;
+  --border:      #272736;
+  --border-2:    #1C1C27;
+  --text:        #EDF0F7;
+  --text-2:      #C0CCDE;
+  --muted:       #8896AA;
+  --subtle:      #566070;
+
+  --primary:     #818CF8;
+  --primary-h:   #6366F1;
+  --primary-t:   rgba(99, 102, 241, 0.13);
+  --primary-b:   rgba(129, 140, 248, 0.28);
+  --primary-l:   #A5B4FC;
+  --primary-la:  #818CF8;
+
+  --danger:      #F87171;
+  --danger-t:    rgba(239, 68, 68, 0.11);
+  --danger-b:    rgba(239, 68, 68, 0.24);
+  --warning:     #FBBF24;
+  --warning-t:   rgba(245, 158, 11, 0.11);
+  --warning-b:   rgba(245, 158, 11, 0.24);
+  --success:     #4ADE80;
+  --success-t:   rgba(34, 197, 94, 0.11);
+  --code-bg:     #080810;
+}
+
+@theme {
+  --color-bg:            #F8F8FF;
+  --color-primary:       #6366F1;
+  --color-primary-tint:  #EEF2FF;
+  --color-primary-dark:  #4F46E5;
+  --color-success:       #22C55E;
+  --color-success-tint:  #DCFCE7;
+  --color-warning:       #F59E0B;
+  --color-warning-tint:  #FEF9C3;
+  --color-danger:        #EF4444;
+  --color-danger-tint:   #FEE2E2;
+  --color-card:          #FFFFFF;
+  --color-border:        #E5E7EB;
+  --color-text:          #111827;
+  --color-muted:         #6B7280;
+  --color-code:          #1E1E2E;
+  --font-sans:           "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono:           "JetBrains Mono", ui-monospace, monospace;
+}
+
+html {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--bg);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+/* ─── Scrollbars ─────────────────────────────────────────────────────────── */
+.docs-sidebar::-webkit-scrollbar { width: 4px; }
+.docs-sidebar::-webkit-scrollbar-track { background: transparent; }
+.docs-sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+pre::-webkit-scrollbar { height: 6px; }
+pre::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+pre::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+
+/* ─── Keyframes ──────────────────────────────────────────────────────────── */
+
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+@keyframes tabFadeIn {
+  from { opacity: 0; transform: translateY(7px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+@keyframes badgePulse {
+  0%, 100% { box-shadow: 0 0 0 0   rgba(99, 102, 241, 0.45); }
+  55%       { box-shadow: 0 0 0 5px rgba(99, 102, 241, 0);    }
+}
+
+/* ─── Hero entrance cascade ──────────────────────────────────────────────── */
+.hero-badge   { animation: heroFadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.00s both; }
+.hero-h1      { animation: heroFadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both; }
+.hero-sub     { animation: heroFadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both; }
+.hero-install { animation: heroFadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.24s both; }
+.hero-ctas    { animation: heroFadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.32s both; }
+.hero-tagline { animation: heroFadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.40s both; }
+.badge-dot    { animation: badgePulse 2.8s ease-in-out infinite; }
+
+/* ─── Button micro-interactions ──────────────────────────────────────────── */
+.btn-primary {
+  transition: background-color 0.18s,
+              transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.2s ease !important;
+}
+.btn-primary:hover {
+  background-color: var(--primary-h) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.32);
+}
+.btn-primary:active { transform: translateY(0); box-shadow: none; }
+
+.btn-secondary {
+  transition: border-color 0.18s, color 0.18s,
+              transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.2s ease !important;
+}
+.btn-secondary:hover {
+  border-color: var(--muted) !important;
+  color: var(--text) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+.btn-secondary:active { transform: translateY(0); }
+
+html[data-theme="dark"] .btn-secondary:hover {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
+
+.nav-install-btn {
+  transition: background-color 0.18s,
+              transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.2s ease !important;
+}
+.nav-install-btn:hover {
+  background-color: var(--primary-h) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.30);
+}
+.nav-install-btn:active { transform: translateY(0); }
+
+/* ─── Nav links ──────────────────────────────────────────────────────────── */
+.nav-link {
+  display: inline-block;
+  transition: color 0.18s, opacity 0.18s;
+}
+.nav-link:hover { color: var(--text) !important; }
+
+/* ─── Card hover lifts ───────────────────────────────────────────────────── */
+.feature-card {
+  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.24s ease;
+  will-change: transform;
+}
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 44px rgba(0,0,0,0.09) !important;
+}
+html[data-theme="dark"] .feature-card:hover {
+  box-shadow: 0 20px 44px rgba(0,0,0,0.35) !important;
+}
+
+.stat-card {
+  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.24s ease;
+  will-change: transform;
+}
+.stat-card:hover { transform: translateY(-4px); }
+
+.pipeline-stage {
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.18s ease;
+}
+.pipeline-stage:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+}
+html[data-theme="dark"] .pipeline-stage:hover {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+}
+
+/* ─── Tab content ────────────────────────────────────────────────────────── */
+.tab-content { animation: tabFadeIn 0.24s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* ─── Mobile menu ────────────────────────────────────────────────────────── */
+.mobile-menu-anim { animation: slideDown 0.22s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* ─── Theme toggle ───────────────────────────────────────────────────────── */
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--muted);
+  transition: color 0.18s, border-color 0.18s, background-color 0.18s, transform 0.18s;
+  flex-shrink: 0;
+}
+.theme-toggle:hover {
+  color: var(--text);
+  border-color: var(--muted);
+  background-color: var(--surface-2);
+  transform: rotate(15deg);
+}
