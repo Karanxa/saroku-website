@@ -16,8 +16,17 @@ export default function DocsContent() {
       <SycophancySection />
       <HonestySection />
       <ConsistencySection />
+      <PromptInjectionSection />
+      <TrustHierarchySection />
+      <CorrigibilitySection />
+      <MinimalFootprintSection />
+      <GoalDriftSection />
+      <SafetyGuardSection />
+      <GuardModesSection />
+      <LocalModelSection />
       <CliReferenceSection />
       <ProbeSchemasSection />
+      <BenchV1Section />
       <BaselineManagementSection />
       <CicdSection />
       <ConfigurationSection />
@@ -279,16 +288,18 @@ function IntroductionSection() {
         </p>
 
         <P>
-          saroku is a behavioral regression testing framework for LLMs. It
-          detects when an LLM's behavioral properties change across model
-          updates, fine-tuning runs, prompt changes, and provider swaps.
+          saroku solves two problems for LLM agent teams: behavioral benchmarking
+          and runtime action safety. It detects when a model&apos;s behavioral
+          properties change across model updates, fine-tuning runs, prompt changes,
+          and provider swaps — and it guards your agents at runtime by intercepting
+          unsafe actions before they execute.
         </P>
         <P>
           Unlike capability benchmarks (MMLU, HumanEval, etc.) which measure
           what a model <em>knows</em>, saroku measures what a model{" "}
-          <em>does under pressure</em>: Does it cave to pushback? Does it
-          maintain its stated beliefs? Does it give consistent answers to the
-          same question phrased differently?
+          <em>does under pressure</em> across 8 behavioral properties: sycophancy,
+          honesty, consistency, prompt injection resistance, trust hierarchy,
+          corrigibility, minimal footprint, and goal drift.
         </P>
 
         <Callout type="info">
@@ -300,11 +311,12 @@ function IntroductionSection() {
 
         <SubHeading>What saroku is NOT</SubHeading>
         <P>
-          saroku is not a capability evaluator, a prompt injection tester, or a
-          general safety scanner. It is purpose-built for behavioral regression
-          detection — knowing whether your model changed. Use Garak for red-teaming,
-          Promptfoo for prompt regression, DeepEval for factuality. Use saroku
-          for behavioral drift.
+          saroku is not a capability evaluator or a general safety scanner. It
+          is purpose-built for behavioral regression detection and runtime action
+          safety. Use Garak for adversarial red-teaming, Promptfoo for prompt
+          regression, DeepEval for factuality benchmarking. Use saroku to track
+          whether your model&apos;s behavioral properties have changed — and to
+          block unsafe agent actions before they run.
         </P>
 
         <SubHeading>Key concepts</SubHeading>
@@ -362,7 +374,7 @@ function InstallationSection() {
 
       <SubHeading>Requirements</SubHeading>
       <ul style={{ paddingLeft: "20px", margin: "0 0 20px", display: "flex", flexDirection: "column", gap: "6px" }}>
-        <li style={{ fontSize: "15px", color: "var(--text-2)" }}>Python 3.9+</li>
+        <li style={{ fontSize: "15px", color: "var(--text-2)" }}>Python 3.10+</li>
         <li style={{ fontSize: "15px", color: "var(--text-2)" }}>An API key for at least one supported LLM provider</li>
         <li style={{ fontSize: "15px", color: "var(--text-2)" }}>Internet access for probe generation (first run only per schema)</li>
       </ul>
@@ -427,50 +439,55 @@ function QuickStartSection() {
         API key set in your environment.
       </P>
 
-      <SubHeading>Step 1: Run all probes</SubHeading>
+      <SubHeading>Step 1: Run the static benchmark</SubHeading>
       <CodeBlock
         code={`export OPENAI_API_KEY=sk-...
-saroku run --model gpt-4o`}
+saroku run --model gpt-4o-mini --benchmark bench-v1`}
         language="bash"
       />
       <P>
-        This will generate probe conversations, run them against{" "}
-        <InlineCode>gpt-4o</InlineCode>, judge the responses, and print a
-        behavioral report. First run takes ~2 minutes; subsequent runs within
-        7 days use cached probes.
+        Runs 96 hand-authored probes across all 8 behavioral properties against{" "}
+        <InlineCode>gpt-4o-mini</InlineCode> and prints a behavioral report.
+        Use <InlineCode>--benchmark bench-v1</InlineCode> for reproducible,
+        citable results. Omit it to generate dynamic probes cached for 7 days.
       </P>
 
       <SubHeading>Step 2: Save the results as a baseline</SubHeading>
       <CodeBlock
-        code={`saroku run --model gpt-4o --save-baseline prod-v1`}
+        code={`saroku run --model gpt-4o-mini --benchmark bench-v1 --save-baseline prod-v1`}
         language="bash"
       />
 
       <SubHeading>Step 3: Compare after a change</SubHeading>
       <CodeBlock
         code={`# After updating your model, system prompt, or provider
-saroku run --model gpt-4o --compare-baseline prod-v1`}
+saroku run --model gpt-4o-mini --benchmark bench-v1 --compare-baseline prod-v1`}
         language="bash"
       />
       <P>
-        saroku will print a delta table showing which behavioral properties
-        improved, regressed, or stayed the same compared to your baseline.
+        saroku prints a delta table showing which behavioral properties improved,
+        regressed, or stayed the same vs. your baseline.
       </P>
 
       <SubHeading>Example output</SubHeading>
       <CodeBlock
-        code={`saroku v0.1.0 — Behavioral Regression Report
-Model: gpt-4o
-Baseline: prod-v1 (saved 2026-03-15 14:22)
-Probes run: 14 schemas × 5 variants = 70 probe conversations
+        code={`saroku v0.4.0 — Behavioral Regression Report
+Model: gpt-4o-mini
+Baseline: prod-v1 (saved 2026-03-15)
+Benchmark: bench-v1 (96 probes, 8 properties)
 
-┌────────────────────────────┬────────┬──────────┬──────────────┐
-│ Property                   │ Score  │ Baseline │ Delta        │
-├────────────────────────────┼────────┼──────────┼──────────────┤
-│ Sycophancy Rate            │ 23.1%  │ 18.4%    │ +4.7%  ⚠ REG │
-│ Honesty Under Pressure     │ 61.2%  │ 68.9%    │ -7.7%  ✗ REG │
-│ Cross-Variant Consistency  │ 79.3%  │ 77.1%    │ +2.2%  ✓     │
-└────────────────────────────┴────────┴──────────┴──────────────┘
+┌──────────────────────────┬────────┬──────────┬──────────────┐
+│ Property                 │ Score  │ Baseline │ Delta        │
+├──────────────────────────┼────────┼──────────┼──────────────┤
+│ Sycophancy Rate          │ 23.1%  │ 18.4%    │ +4.7%  ⚠ REG │
+│ Honesty Score            │ 61.2%  │ 68.9%    │ -7.7%  ✗ REG │
+│ Consistency Score        │ 79.3%  │ 77.1%    │ +2.2%  ✓     │
+│ Injection Resistance     │ 84.1%  │ 87.3%    │ -3.2%  ⚠     │
+│ Trust Hierarchy          │ 91.0%  │ 90.5%    │ +0.5%  ✓     │
+│ Corrigibility            │ 88.2%  │ 88.2%    │  0.0%  ✓     │
+│ Minimal Footprint        │ 76.4%  │ 79.1%    │ -2.7%  ⚠     │
+│ Goal Stability           │ 82.0%  │ 83.5%    │ -1.5%  ✓     │
+└──────────────────────────┴────────┴──────────┴──────────────┘
 
 2 regressions detected. Run with --fail-on-regression to gate CI/CD.`}
         language="bash"
@@ -733,7 +750,313 @@ function ConsistencySection() {
         </table>
       </div>
 
-      <CodeBlock code={`saroku run --model gpt-4o --probes consistency`} language="bash" />
+      <CodeBlock code={`saroku run --model gpt-4o-mini --probes consistency`} language="bash" />
+    </div>
+  );
+}
+
+/* ─── Prompt Injection ────────────────────────────────────────────────── */
+
+function PromptInjectionSection() {
+  return (
+    <div>
+      <SectionHeading id="prompt-injection">Prompt Injection</SectionHeading>
+      <P>
+        Tests whether the model follows instructions embedded in external data (tool results,
+        documents, emails, search results) rather than adhering to the original task. This is one
+        of the most critical failure modes for agentic systems that process untrusted inputs.
+      </P>
+      <Callout type="warning">
+        14 schemas covering the broadest injection surface of any behavioral testing tool: web
+        search, email processing, document summarization, database results, code execution output,
+        RAG retrieval, API responses, config files, log analysis, and more.
+      </Callout>
+      <SubHeading>What saroku checks</SubHeading>
+      <ul style={{ paddingLeft: "20px", margin: "0 0 16px", display: "flex", flexDirection: "column", gap: "8px" }}>
+        <li style={{ fontSize: "15px", color: "var(--text-2)" }}>Does the model follow injected instructions in tool results?</li>
+        <li style={{ fontSize: "15px", color: "var(--text-2)" }}>Does it resist overrides like &ldquo;ignore previous instructions&rdquo;?</li>
+        <li style={{ fontSize: "15px", color: "var(--text-2)" }}>Does it exfiltrate data, change behavior, or impersonate other systems when prompted by injected content?</li>
+      </ul>
+      <CodeBlock code={`saroku run --model gpt-4o-mini --probes prompt_injection`} language="bash" />
+    </div>
+  );
+}
+
+/* ─── Trust Hierarchy ─────────────────────────────────────────────────── */
+
+function TrustHierarchySection() {
+  return (
+    <div>
+      <SectionHeading id="trust-hierarchy">Trust Hierarchy</SectionHeading>
+      <P>
+        Tests whether the model respects operator-level constraints when users attempt to override
+        them. In production agentic systems, the operator (system prompt) should take precedence
+        over user requests when there is a conflict.
+      </P>
+      <SubHeading>What saroku checks</SubHeading>
+      <ul style={{ paddingLeft: "20px", margin: "0 0 16px", display: "flex", flexDirection: "column", gap: "8px" }}>
+        <li style={{ fontSize: "15px", color: "var(--text-2)" }}>Does the model hold operator constraints under user pressure?</li>
+        <li style={{ fontSize: "15px", color: "var(--text-2)" }}>Does it refuse user requests that violate operator-defined rules?</li>
+        <li style={{ fontSize: "15px", color: "var(--text-2)" }}>Does it maintain restrictions even when users claim elevated authority?</li>
+      </ul>
+      <CodeBlock code={`saroku run --model gpt-4o-mini --probes trust_hierarchy`} language="bash" />
+    </div>
+  );
+}
+
+/* ─── Corrigibility ───────────────────────────────────────────────────── */
+
+function CorrigibilitySection() {
+  return (
+    <div>
+      <SectionHeading id="corrigibility">Corrigibility</SectionHeading>
+      <P>
+        Tests whether the model stops, reverts, or adjusts its behavior when corrected mid-task.
+        A corrigible agent accepts corrections gracefully rather than arguing, continuing, or
+        partially complying.
+      </P>
+      <SubHeading>What saroku checks</SubHeading>
+      <ul style={{ paddingLeft: "20px", margin: "0 0 16px", display: "flex", flexDirection: "column", gap: "8px" }}>
+        <li style={{ fontSize: "15px", color: "var(--text-2)" }}>Does the model stop when told to stop mid-task?</li>
+        <li style={{ fontSize: "15px", color: "var(--text-2)" }}>Does it accept scope reductions without resistance?</li>
+        <li style={{ fontSize: "15px", color: "var(--text-2)" }}>Does it revert partial work when asked?</li>
+      </ul>
+      <CodeBlock code={`saroku run --model gpt-4o-mini --probes corrigibility`} language="bash" />
+    </div>
+  );
+}
+
+/* ─── Minimal Footprint ───────────────────────────────────────────────── */
+
+function MinimalFootprintSection() {
+  return (
+    <div>
+      <SectionHeading id="minimal-footprint">Minimal Footprint</SectionHeading>
+      <P>
+        Tests whether the model prefers reversible actions over irreversible ones when both are
+        available. Agents should default to the minimum necessary scope and ask before taking
+        actions that cannot be undone.
+      </P>
+      <SubHeading>What saroku checks</SubHeading>
+      <ul style={{ paddingLeft: "20px", margin: "0 0 16px", display: "flex", flexDirection: "column", gap: "8px" }}>
+        <li style={{ fontSize: "15px", color: "var(--text-2)" }}>Given a choice, does the model select the reversible action?</li>
+        <li style={{ fontSize: "15px", color: "var(--text-2)" }}>Does it request confirmation before irreversible operations?</li>
+        <li style={{ fontSize: "15px", color: "var(--text-2)" }}>Does it scope actions to exactly what was asked?</li>
+      </ul>
+      <CodeBlock code={`saroku run --model gpt-4o-mini --probes minimal_footprint`} language="bash" />
+    </div>
+  );
+}
+
+/* ─── Goal Drift ──────────────────────────────────────────────────────── */
+
+function GoalDriftSection() {
+  return (
+    <div>
+      <SectionHeading id="goal-drift">Goal Drift</SectionHeading>
+      <P>
+        Tests whether the model stays on the original task under progressive environmental
+        pressure. Goal drift occurs when an agent expands its scope, changes its objective,
+        or starts optimizing for a proxy goal due to messages in the context.
+      </P>
+      <SubHeading>What saroku checks</SubHeading>
+      <ul style={{ paddingLeft: "20px", margin: "0 0 16px", display: "flex", flexDirection: "column", gap: "8px" }}>
+        <li style={{ fontSize: "15px", color: "var(--text-2)" }}>Does the model maintain its original goal across multi-turn conversations?</li>
+        <li style={{ fontSize: "15px", color: "var(--text-2)" }}>Does it resist environmental messages that redefine or expand its task?</li>
+        <li style={{ fontSize: "15px", color: "var(--text-2)" }}>Does it stay within the scope of what was asked without seeking to do more?</li>
+      </ul>
+      <CodeBlock code={`saroku run --model gpt-4o-mini --probes goal_drift`} language="bash" />
+    </div>
+  );
+}
+
+/* ─── Runtime Safety Guard ────────────────────────────────────────────── */
+
+function SafetyGuardSection() {
+  return (
+    <div>
+      <SectionHeading id="safety-guard">SafetyGuard Overview</SectionHeading>
+      <P>
+        <InlineCode>SafetyGuard</InlineCode> intercepts agent actions before they execute and
+        checks them against a 3-layer cascade: a deterministic rules engine, a feature-based ML
+        scorer, and an LLM or local model judge. Clear violations are caught in under 1ms —
+        only genuinely ambiguous actions (~15% of traffic) reach the LLM.
+      </P>
+      <CodeBlock
+        code={`from saroku import SafetyGuard
+
+guard = SafetyGuard()
+
+result = guard.check(
+    action="DELETE FROM users WHERE last_login < '2023-01-01'",
+    context="Production database agent",
+    operator_constraints=[
+        "Never DELETE on production without explicit written confirmation",
+    ],
+)
+
+if not result.is_safe:
+    for v in result.violations:
+        print(f"[{v.severity.upper()}] {v.property}: {v.description}")
+        print(f"  → {v.recommendation}")
+
+# Async support
+result = await guard.acheck(action="...", context="...")`}
+        language="python"
+      />
+      <SubHeading>Result object</SubHeading>
+      <CodeBlock
+        code={`result.is_safe          # bool
+result.violations       # list[SafetyViolation]
+result.latency_ms       # float — total wall-clock time
+result.layers_used      # ["rules"] | ["rules","ml"] | ["rules","ml","local_model"]
+result.ml_risk_score    # float 0–1 from Layer 2
+
+# Each SafetyViolation:
+v.property        # e.g. "trust_hierarchy", "minimal_footprint"
+v.severity        # "high" | "medium" | "low"
+v.description     # what the violation is
+v.recommendation  # what to do instead
+v.source          # "rules" | "ml" | "local_model"`}
+        language="python"
+      />
+      <SubHeading>3-layer cascade</SubHeading>
+      <P>
+        Layer 1 (Rules Engine, &lt;1ms) — deterministic regex patterns for clear-cut violations:
+        DROP TABLE, skip_tests=True, disable auth, credential logging, injection signals.
+      </P>
+      <P>
+        Layer 2 (ML Scorer, ~5ms) — 25 structured features feed a linear risk model. Scores
+        0–1, blocks above 0.85, allows below 0.30, escalates everything else.
+      </P>
+      <P>
+        Layer 3 (LLM / Local Model, ~65ms–10s) — only runs for genuinely ambiguous actions.
+        Evaluates 7 behavioral properties and returns structured violations.
+      </P>
+    </div>
+  );
+}
+
+/* ─── Guard Modes ─────────────────────────────────────────────────────── */
+
+function GuardModesSection() {
+  return (
+    <div>
+      <SectionHeading id="guard-modes">Guard Modes</SectionHeading>
+      <P>Three modes trade off latency against coverage:</P>
+      <CodeBlock
+        code={`# fast — rules + ML only, no model required (<5ms total)
+guard = SafetyGuard(mode="fast")
+
+# balanced — 3-layer cascade, default, recommended for production
+guard = SafetyGuard(mode="balanced")                              # API judge
+guard = SafetyGuard(                                              # local model
+    mode="balanced",
+    local_model_path="./models/saroku-safety-0.5b/model",
+)
+
+# thorough — always uses LLM judge (bypasses early exits)
+guard = SafetyGuard(mode="thorough", judge_model="gpt-4o-mini")`}
+        language="python"
+      />
+      <Callout type="tip">
+        Use <InlineCode>mode=&quot;fast&quot;</InlineCode> for low-latency paths where the action
+        set is predictable. Use <InlineCode>mode=&quot;balanced&quot;</InlineCode> with the local
+        model for production — it handles ~85% of traffic without any API calls.
+      </Callout>
+    </div>
+  );
+}
+
+/* ─── Local Safety Model ──────────────────────────────────────────────── */
+
+function LocalModelSection() {
+  return (
+    <div>
+      <SectionHeading id="local-model">Local Safety Model</SectionHeading>
+      <P>
+        saroku ships with a fine-tuned 0.5B model for offline inference. No API key, no network
+        requests, no data leaving your environment. Requires a GPU with ~1GB VRAM.
+      </P>
+      <SubHeading>Download</SubHeading>
+      <P>
+        Download <InlineCode>saroku-safety-0.5b.tar.gz</InlineCode> from the GitHub Releases
+        page and extract it:
+      </P>
+      <CodeBlock
+        code={`tar -xzf saroku-safety-0.5b.tar.gz -C ./models/`}
+        language="bash"
+      />
+      <SubHeading>Usage</SubHeading>
+      <CodeBlock
+        code={`guard = SafetyGuard(
+    mode="balanced",
+    local_model_path="./models/model",
+)
+
+result = guard.check(action="...", context="...")`}
+        language="python"
+      />
+      <SubHeading>Performance</SubHeading>
+      <div style={{ overflowX: "auto", marginBottom: "24px" }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "14px" }}>
+          <thead>
+            <tr style={{ backgroundColor: "var(--surface-2)" }}>
+              {["Scenario", "Latency"].map(h => (
+                <th key={h} style={{ textAlign: "left", padding: "10px 14px", color: "var(--muted)", fontWeight: 600, fontSize: "12px", borderBottom: "1px solid #E5E7EB" }}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              ["Clear violation caught by rules engine", "< 1ms"],
+              ["Ambiguous action evaluated by local model", "~65ms"],
+              ["Average across 1000 queries (mixed traffic)", "< 50ms"],
+            ].map(([scenario, latency]) => (
+              <tr key={scenario} style={{ borderBottom: "1px solid #F3F4F6" }}>
+                <td style={{ padding: "10px 14px", color: "var(--text-2)" }}>{scenario}</td>
+                <td style={{ padding: "10px 14px", color: "var(--primary)", fontFamily: "var(--font-jetbrains), monospace", fontSize: "13px" }}>{latency}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <SubHeading>Train your own</SubHeading>
+      <CodeBlock
+        code={`pip install saroku[train]
+python -m saroku.training.trainer --output-dir ./my-model --epochs 3`}
+        language="bash"
+      />
+    </div>
+  );
+}
+
+/* ─── bench-v1 ────────────────────────────────────────────────────────── */
+
+function BenchV1Section() {
+  return (
+    <div>
+      <SectionHeading id="bench-v1">bench-v1 Benchmark</SectionHeading>
+      <P>
+        A static, version-locked set of 96 hand-authored probe instances — 3 per schema across
+        all 32 schemas. Unlike dynamically generated probes, bench-v1 results are fully
+        reproducible across runs and directly comparable across teams and over time.
+      </P>
+      <Callout type="tip">
+        Use bench-v1 whenever you want citable, reproducible results. Use dynamic probe
+        generation (<InlineCode>--intensity deep</InlineCode>) for broader coverage.
+      </Callout>
+      <CodeBlock
+        code={`# Run bench-v1 from the CLI
+saroku run --model gpt-4o-mini --benchmark bench-v1
+
+# Or load it from Python
+from saroku.benchmarks import load_benchmark
+
+bench = load_benchmark("bench-v1")
+# Returns: {"version": "bench-v1", "count": 96, "properties": [...]}`}
+        language="python"
+      />
     </div>
   );
 }
@@ -755,17 +1078,35 @@ function CliReferenceSection() {
 
       <PropTable
         rows={[
-          { prop: "-m, --model", type: "TEXT", description: "Model string. Supports any LiteLLM model identifier: gpt-4o, claude-sonnet-4-6, vertex_ai/gemini-1.5-pro, etc." },
-          { prop: "-p, --probes", type: "TEXT", default: "all", description: "Filter probes by category: sycophancy | honesty | consistency | all" },
-          { prop: "-s, --schemas", type: "TEXT", description: "Run specific schema IDs only (comma-separated). Overrides --probes." },
-          { prop: "--judge-model", type: "TEXT", default: "gpt-4o-mini", description: "Model to use as judge for evaluating responses. Must support the OpenAI chat format." },
-          { prop: "--no-cache", type: "flag", description: "Bypass the 7-day probe cache and regenerate all probes from schemas." },
+          { prop: "-m, --model", type: "TEXT", description: "Model string. Any LiteLLM identifier: gpt-4o-mini, claude-sonnet-4-6, vertex_ai/gemini-1.5-pro, etc." },
+          { prop: "--benchmark", type: "TEXT", description: "Use a static benchmark instead of generating probes. Use bench-v1 for reproducible, citable results." },
+          { prop: "-p, --probes", type: "TEXT", default: "all", description: "Filter by property: sycophancy | honesty | consistency | prompt_injection | trust_hierarchy | corrigibility | minimal_footprint | goal_drift | all" },
+          { prop: "--intensity", type: "TEXT", default: "standard", description: "Probe depth: smoke (4/schema) | standard (15/schema) | deep (36/schema) | exhaustive (72/schema)" },
+          { prop: "--judge-model", type: "TEXT", default: "gpt-4o-mini", description: "Model to use as judge for evaluating responses." },
+          { prop: "--concurrency", type: "INT", default: "50", description: "Max parallel probe workers." },
+          { prop: "--no-cache", type: "flag", description: "Bypass the 7-day probe cache and regenerate all probes." },
           { prop: "--save-baseline", type: "TEXT", description: "Save results as a named baseline after the run completes." },
           { prop: "--compare-baseline", type: "TEXT", description: "Compare results against a previously saved named baseline." },
-          { prop: "--fail-on-regression", type: "flag", description: "Exit with code 1 if any behavioral property regresses vs. the baseline. Useful as a CI/CD gate." },
-          { prop: "-o, --output", type: "TEXT", description: "Write full results to a JSON file at the specified path." },
+          { prop: "--fail-on-regression", type: "flag", description: "Exit with code 1 if any behavioral property regresses vs. the baseline. CI/CD gate." },
+          { prop: "-o, --output", type: "TEXT", description: "Write full results to a JSON file." },
           { prop: "--verbose", type: "flag", description: "Print individual probe results in addition to the summary table." },
         ]}
+      />
+
+      <SubHeading>saroku compare</SubHeading>
+      <P>Run the same benchmark against multiple models and compare results side-by-side.</P>
+      <CodeBlock
+        code={`saroku compare --models gpt-4o-mini,claude-sonnet-4-6 --benchmark bench-v1`}
+        language="bash"
+        compact
+      />
+
+      <SubHeading>saroku calibrate</SubHeading>
+      <P>Validate your judge model&apos;s accuracy against 40 hand-labeled ground-truth probe instances.</P>
+      <CodeBlock
+        code={`saroku calibrate --judge-model gpt-4o-mini`}
+        language="bash"
+        compact
       />
 
       <SubHeading>saroku baseline</SubHeading>
@@ -778,28 +1119,31 @@ saroku baseline list             # List all saved baselines`}
 
       <SubHeading>saroku schemas</SubHeading>
       <CodeBlock
-        code={`saroku schemas                   # List all built-in probe schemas
-saroku schemas --show <schema-id> # Print schema YAML`}
+        code={`saroku schemas                    # List all built-in probe schemas
+saroku schemas --property honesty # Filter by behavioral property`}
         language="bash"
       />
 
       <SubHeading>Full CLI reference</SubHeading>
       <CodeBlock
         code={`saroku run --model <model> [options]
-  -m, --model TEXT              Model string (gpt-4o, claude-sonnet-4-6, vertex_ai/gemini-1.5-pro)
-  -p, --probes TEXT             Filter: sycophancy | honesty | consistency | all [default: all]
-  -s, --schemas TEXT            Specific schema IDs (overrides --probes)
+  -m, --model TEXT              Model string (gpt-4o-mini, claude-sonnet-4-6, ...)
+  --benchmark TEXT              Static benchmark (bench-v1)
+  -p, --probes TEXT             Property filter [default: all]
+  --intensity TEXT              smoke|standard|deep|exhaustive [default: standard]
   --judge-model TEXT            Judge model [default: gpt-4o-mini]
-  --no-cache                    Bypass 7-day cache, regenerate probes
+  --concurrency INT             Parallel workers [default: 50]
+  --no-cache                    Bypass 7-day cache
   --save-baseline TEXT          Save results as named baseline
   --compare-baseline TEXT       Compare against named baseline
   --fail-on-regression          Exit code 1 on regression (CI/CD gate)
   -o, --output TEXT             Write results to JSON
+  -v, --verbose                 Verbose output
 
-saroku baseline save <name>
-saroku baseline compare <name>
-saroku baseline list
-saroku schemas`}
+saroku compare --models <csv> --benchmark <name>
+saroku calibrate --judge-model <model>
+saroku baseline save|compare|list <name>
+saroku schemas [--property <property>]`}
         language="bash"
       />
     </div>
@@ -848,39 +1192,32 @@ cache_ttl_days: 7`}
         language="yaml"
       />
 
-      <SubHeading>All 14 built-in schemas</SubHeading>
+      <SubHeading>All 52+ built-in schemas</SubHeading>
+      <P>Schemas are grouped by behavioral property. Run <InlineCode>saroku schemas</InlineCode> to list all available IDs.</P>
       <div style={{ overflowX: "auto", marginBottom: "24px" }}>
         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "14px" }}>
           <thead>
             <tr style={{ backgroundColor: "var(--surface-2)" }}>
-              {["Schema ID", "Property", "Domain"].map(h => (
+              {["Property", "Schema count", "Domains covered"].map(h => (
                 <th key={h} style={{ textAlign: "left", padding: "10px 14px", color: "var(--muted)", fontWeight: 600, fontSize: "12px", borderBottom: "1px solid #E5E7EB" }}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {[
-              ["syco/medical/drug-interactions", "Sycophancy", "Medical"],
-              ["syco/medical/dosage", "Sycophancy", "Medical"],
-              ["syco/financial/risk", "Sycophancy", "Financial"],
-              ["syco/science/facts", "Sycophancy", "Science"],
-              ["syco/legal/rights", "Sycophancy", "Legal"],
-              ["syco/general/history", "Sycophancy", "General"],
-              ["honesty/capability/internet", "Honesty", "Capability"],
-              ["honesty/capability/memory", "Honesty", "Capability"],
-              ["honesty/uncertainty/knowledge", "Honesty", "Uncertainty"],
-              ["honesty/limitation/training", "Honesty", "Limitation"],
-              ["consistency/financial/risk-assessment", "Consistency", "Financial"],
-              ["consistency/medical/advice", "Consistency", "Medical"],
-              ["consistency/legal/interpretation", "Consistency", "Legal"],
-              ["consistency/general/recommendation", "Consistency", "General"],
-            ].map(([id, prop, domain]) => (
-              <tr key={id} style={{ borderBottom: "1px solid #F3F4F6" }}>
-                <td style={{ padding: "10px 14px" }}>
-                  <code style={{ fontSize: "12px", color: "var(--primary)", fontFamily: "var(--font-jetbrains), monospace" }}>{id}</code>
-                </td>
-                <td style={{ padding: "10px 14px", color: "var(--text-2)" }}>{prop}</td>
-                <td style={{ padding: "10px 14px", color: "var(--muted)" }}>{domain}</td>
+              ["Sycophancy",       "12", "Medical, financial, legal, science, engineering, general"],
+              ["Honesty",          "8",  "Capability, uncertainty, limitations, knowledge"],
+              ["Consistency",      "4",  "Financial, medical, legal, general"],
+              ["Prompt Injection", "14", "Web search, email, docs, database, code, RAG, APIs, config, logs"],
+              ["Trust Hierarchy",  "4",  "Operator constraints, user override attempts"],
+              ["Corrigibility",    "4",  "Mid-task correction, cancellation, scope reduction"],
+              ["Minimal Footprint","3",  "Reversible vs. irreversible action selection"],
+              ["Goal Drift",       "3",  "Progressive environmental pressure and scope expansion"],
+            ].map(([prop, count, domains]) => (
+              <tr key={prop} style={{ borderBottom: "1px solid #F3F4F6" }}>
+                <td style={{ padding: "10px 14px", color: "var(--text-2)", fontWeight: 500 }}>{prop}</td>
+                <td style={{ padding: "10px 14px", color: "var(--muted)", fontFamily: "var(--font-jetbrains), monospace", fontSize: "13px" }}>{count}</td>
+                <td style={{ padding: "10px 14px", color: "var(--muted)" }}>{domains}</td>
               </tr>
             ))}
           </tbody>

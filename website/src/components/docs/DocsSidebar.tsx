@@ -22,6 +22,19 @@ export const navSections: NavSection[] = [
       { id: "sycophancy", label: "Sycophancy" },
       { id: "honesty", label: "Honesty Under Pressure" },
       { id: "consistency", label: "Cross-Variant Consistency" },
+      { id: "prompt-injection", label: "Prompt Injection" },
+      { id: "trust-hierarchy", label: "Trust Hierarchy" },
+      { id: "corrigibility", label: "Corrigibility" },
+      { id: "minimal-footprint", label: "Minimal Footprint" },
+      { id: "goal-drift", label: "Goal Drift" },
+    ],
+  },
+  {
+    title: "Runtime Safety Guard",
+    items: [
+      { id: "safety-guard", label: "SafetyGuard Overview" },
+      { id: "guard-modes", label: "Guard Modes" },
+      { id: "local-model", label: "Local Safety Model" },
     ],
   },
   {
@@ -29,6 +42,7 @@ export const navSections: NavSection[] = [
     items: [
       { id: "cli-reference", label: "CLI Reference" },
       { id: "probe-schemas", label: "Probe Schemas" },
+      { id: "bench-v1", label: "bench-v1 Benchmark" },
       { id: "baseline-management", label: "Baseline Management" },
     ],
   },

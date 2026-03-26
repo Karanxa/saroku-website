@@ -5,24 +5,33 @@ import CodeBlock from "./CodeBlock";
 
 const tabs = [
   {
-    id: "install",
-    label: "Install & Run",
-    shortLabel: "Install",
+    id: "benchmark",
+    label: "Benchmark",
+    shortLabel: "Bench",
     content: [
       {
-        description: "Install saroku from PyPI:",
+        description: "Install saroku (Python 3.10+):",
         code: `pip install saroku`,
         language: "bash",
       },
       {
-        description: "Set your API key and run against any supported model:",
+        description: "Run the reproducible bench-v1 benchmark or generate dynamic probes:",
         code: `export OPENAI_API_KEY=sk-...
 
-# Run all behavioral probes against gpt-4o
-saroku run --model gpt-4o
+# Run the static bench-v1 benchmark (96 hand-authored probes, reproducible)
+saroku run --model gpt-4o-mini --benchmark bench-v1
 
-# Run only sycophancy probes
-saroku run --model gpt-4o --probes sycophancy
+# Generate dynamic probes — all 8 behavioral properties
+saroku run --model gpt-4o-mini
+
+# Run specific properties only
+saroku run --model gpt-4o-mini --probes sycophancy,prompt_injection
+
+# Control depth: smoke | standard | deep | exhaustive
+saroku run --model gpt-4o-mini --intensity deep
+
+# Compare two models side-by-side on the same benchmark
+saroku compare --models gpt-4o-mini,claude-sonnet-4-6
 
 # Run against Anthropic Claude
 export ANTHROPIC_API_KEY=sk-ant-...
@@ -42,25 +51,30 @@ saroku run --model vertex_ai/gemini-1.5-pro`,
       {
         description: "Save a baseline for your current production model:",
         code: `# Run tests and save results as a named baseline
-saroku run --model gpt-4o --save-baseline prod-v1`,
+saroku run --model gpt-4o-mini --benchmark bench-v1 --save-baseline prod-v1`,
         language: "bash",
       },
       {
         description: "After a model update, compare against the saved baseline:",
         code: `# Compare new model run against saved baseline
-saroku run --model gpt-4o --compare-baseline prod-v1
+saroku run --model gpt-4o-mini --benchmark bench-v1 --compare-baseline prod-v1
 
 # Example output:
-# ┌─────────────────────────────────────────────────┐
-# │           saroku Behavioral Report               │
-# │  Model: gpt-4o        Baseline: prod-v1         │
-# ├────────────────────┬────────┬─────────┬─────────┤
-# │ Property           │ Score  │Baseline │  Delta  │
-# ├────────────────────┼────────┼─────────┼─────────┤
-# │ Sycophancy Rate    │ 23.1%  │ 18.4%   │ +4.7% ⚠ │
-# │ Honesty Rate       │ 61.2%  │ 68.9%   │ -7.7% ✗ │
-# │ Consistency Rate   │ 79.3%  │ 77.1%   │ +2.2% ✓ │
-# └────────────────────┴────────┴─────────┴─────────┘`,
+# ┌──────────────────────────────────────────────────────────┐
+# │              saroku Behavioral Report                     │
+# │  Model: gpt-4o-mini        Baseline: prod-v1             │
+# ├──────────────────────────┬────────┬─────────┬────────────┤
+# │ Property                 │ Score  │Baseline │  Delta     │
+# ├──────────────────────────┼────────┼─────────┼────────────┤
+# │ Sycophancy Rate          │ 23.1%  │ 18.4%   │ +4.7% ⚠   │
+# │ Honesty Score            │ 61.2%  │ 68.9%   │ -7.7% ✗   │
+# │ Consistency Score        │ 79.3%  │ 77.1%   │ +2.2% ✓   │
+# │ Injection Resistance     │ 84.1%  │ 87.3%   │ -3.2% ⚠   │
+# │ Trust Hierarchy          │ 91.0%  │ 90.5%   │ +0.5% ✓   │
+# │ Corrigibility            │ 88.2%  │ 88.2%   │  0.0% ✓   │
+# │ Minimal Footprint        │ 76.4%  │ 79.1%   │ -2.7% ⚠   │
+# │ Goal Stability           │ 82.0%  │ 83.5%   │ -1.5% ✓   │
+# └──────────────────────────┴────────┴─────────┴────────────┘`,
         language: "bash",
       },
       {
@@ -68,12 +82,76 @@ saroku run --model gpt-4o --compare-baseline prod-v1
         code: `# List all saved baselines
 saroku baseline list
 
-# Manually save current run as baseline
+# Save current run as baseline
 saroku baseline save prod-v2
 
-# Compare two baselines directly
+# Compare directly against a saved baseline
 saroku baseline compare prod-v1`,
         language: "bash",
+      },
+    ],
+  },
+  {
+    id: "guard",
+    label: "Runtime Guard",
+    shortLabel: "Guard",
+    content: [
+      {
+        description: "Add one safety check before your agent executes any action:",
+        code: `from saroku import SafetyGuard
+
+guard = SafetyGuard()
+
+result = guard.check(
+    action="DELETE FROM users WHERE last_login < '2023-01-01'",
+    context="Production database agent",
+    operator_constraints=[
+        "Never DELETE on production without explicit written confirmation",
+    ],
+)
+
+if not result.is_safe:
+    for v in result.violations:
+        print(f"[{v.severity.upper()}] {v.description}")
+        print(f"  → {v.recommendation}")
+
+# Async support for async agent pipelines
+result = await guard.acheck(action="...", context="...")`,
+        language: "python",
+      },
+      {
+        description: "Choose the right mode for your deployment:",
+        code: `# Fast — rules + ML only, no model required (<5ms)
+guard = SafetyGuard(mode="fast")
+
+# Balanced — 3-layer cascade, recommended for production (~65ms with local model)
+guard = SafetyGuard(
+    mode="balanced",
+    local_model_path="./models/saroku-safety-0.5b/model",  # no API key needed
+)
+
+# Balanced with API judge (if no local GPU)
+guard = SafetyGuard(mode="balanced", judge_model="gpt-4o-mini")
+
+# Thorough — always use the LLM judge
+guard = SafetyGuard(mode="thorough", judge_model="gpt-4o-mini")`,
+        language: "python",
+      },
+      {
+        description: "Inspect the result object:",
+        code: `result.is_safe          # bool
+result.violations       # list[SafetyViolation]
+result.latency_ms       # float — total check time
+result.layers_used      # ["rules"] | ["rules", "ml"] | ["rules", "ml", "local_model"]
+result.ml_risk_score    # float 0–1
+
+# Each violation:
+v.property        # "trust_hierarchy", "minimal_footprint", etc.
+v.severity        # "high", "medium", "low"
+v.description     # what the violation is
+v.recommendation  # what to do instead
+v.source          # "rules", "ml", or "local_model"`,
+        language: "python",
       },
     ],
   },
@@ -86,6 +164,7 @@ saroku baseline compare prod-v1`,
         description: "Use --fail-on-regression to gate deployments in CI:",
         code: `# Exit code 1 if any property regresses vs. baseline
 saroku run --model gpt-4o-mini \\
+  --benchmark bench-v1 \\
   --compare-baseline production \\
   --fail-on-regression`,
         language: "bash",
@@ -115,6 +194,7 @@ jobs:
           pip install saroku
           saroku run \\
             --model gpt-4o-mini \\
+            --benchmark bench-v1 \\
             --compare-baseline production \\
             --fail-on-regression \\
             --output results.json
@@ -194,10 +274,10 @@ export default function QuickStartTabs() {
 
       <style>{`
         .qs-label-short { display: none; }
-        @media (max-width: 540px) {
+        @media (max-width: 580px) {
           .qs-label-long  { display: none; }
           .qs-label-short { display: inline; }
-          .qs-tab-btn     { font-size: 13px; padding: 8px 6px; }
+          .qs-tab-btn     { font-size: 12px; padding: 7px 5px; }
         }
       `}</style>
     </div>
