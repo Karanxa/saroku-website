@@ -70,7 +70,8 @@ function HeroSection() {
       >
         saroku benchmarks your LLM across 8 behavioral properties — sycophancy, honesty,
         prompt injection resistance, trust hierarchy, and more — and guards your agents at
-        runtime with a 3-layer safety check that completes in under 200ms.{" "}
+        runtime with a 3-layer safety check that completes in under 200ms.
+        <br />
         <strong style={{ color: "var(--text-2)", fontWeight: 600 }}>
           Test behavioral drift in CI. Block unsafe actions in production.
         </strong>
