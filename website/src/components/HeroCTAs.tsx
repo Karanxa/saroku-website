@@ -27,16 +27,15 @@ export default function HeroCTAs() {
         href="https://github.com/Karanxa/saroku"
         target="_blank"
         rel="noopener noreferrer"
-        className="btn-secondary"
         style={{
-          backgroundColor: "var(--surface)",
-          color: "var(--text-2)",
+          backgroundColor: "#24292f",
+          color: "#ffffff",
           padding: "13px 28px",
           borderRadius: "8px",
           fontSize: "15px",
           fontWeight: 600,
           textDecoration: "none",
-          border: "1px solid var(--border)",
+          border: "1px solid #24292f",
           display: "inline-flex",
           alignItems: "center",
           gap: "8px",
@@ -49,16 +48,15 @@ export default function HeroCTAs() {
         href="https://huggingface.co/karanxa/saroku-safety-0.5b"
         target="_blank"
         rel="noopener noreferrer"
-        className="btn-secondary"
         style={{
-          backgroundColor: "var(--surface)",
-          color: "var(--text-2)",
+          backgroundColor: "#FFD21E",
+          color: "#1a1a1a",
           padding: "13px 28px",
           borderRadius: "8px",
           fontSize: "15px",
           fontWeight: 600,
           textDecoration: "none",
-          border: "1px solid var(--border)",
+          border: "1px solid #FFD21E",
           display: "inline-flex",
           alignItems: "center",
           gap: "8px",
