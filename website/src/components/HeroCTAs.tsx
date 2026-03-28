@@ -65,7 +65,7 @@ export default function HeroCTAs() {
         }}
       >
         <HuggingFaceIcon />
-        Safety Model
+        View on HuggingFace
       </a>
     </div>
   );
