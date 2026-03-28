@@ -952,7 +952,7 @@ guard = SafetyGuard(mode="fast")
 guard = SafetyGuard(mode="balanced")                              # API judge
 guard = SafetyGuard(                                              # local model
     mode="balanced",
-    local_model_path="./models/saroku-safety-0.5b/model",
+    local_model_path="./models/saroku-safety-0.5b",
 )
 
 # thorough — always uses LLM judge (bypasses early exits)
@@ -978,20 +978,36 @@ function LocalModelSection() {
         saroku ships with a fine-tuned 0.5B model for offline inference. No API key, no network
         requests, no data leaving your environment. Requires a GPU with ~1GB VRAM.
       </P>
-      <SubHeading>Download</SubHeading>
       <P>
-        Download <InlineCode>saroku-safety-0.5b.tar.gz</InlineCode> from the GitHub Releases
-        page and extract it:
+        The model is published on HuggingFace at{" "}
+        <a
+          href="https://huggingface.co/karanxa/saroku-safety-0.5b"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "var(--primary)", textDecoration: "none" }}
+        >
+          karanxa/saroku-safety-0.5b
+        </a>
+        .
       </P>
+      <SubHeading>Download</SubHeading>
+      <P>Download with the HuggingFace CLI:</P>
       <CodeBlock
-        code={`tar -xzf saroku-safety-0.5b.tar.gz -C ./models/`}
+        code={`pip install huggingface_hub
+huggingface-cli download karanxa/saroku-safety-0.5b --local-dir ./models/saroku-safety-0.5b`}
         language="bash"
+      />
+      <P>Or directly in Python:</P>
+      <CodeBlock
+        code={`from huggingface_hub import snapshot_download
+snapshot_download("karanxa/saroku-safety-0.5b", local_dir="./models/saroku-safety-0.5b")`}
+        language="python"
       />
       <SubHeading>Usage</SubHeading>
       <CodeBlock
         code={`guard = SafetyGuard(
     mode="balanced",
-    local_model_path="./models/model",
+    local_model_path="./models/saroku-safety-0.5b",
 )
 
 result = guard.check(action="...", context="...")`}
