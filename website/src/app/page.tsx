@@ -68,7 +68,9 @@ function HeroSection() {
           lineHeight: "1.65", maxWidth: "600px", margin: "0 auto 40px",
         }}
       >
-        Benchmark behavioral drift. Block unsafe agent actions at runtime.
+        Benchmark behavioral drift.{" "}
+        <br className="hero-sub-break" />
+        Block unsafe agent actions at runtime.
       </p>
 
       {/* Install command */}
@@ -584,8 +586,9 @@ result = await guard.acheck(action="...", context="...")`}
         <style>{`
           @media (max-width: 768px) { .guard-grid { grid-template-columns: 1fr !important; } }
           .guard-grid > * { min-width: 0; }
+          .hero-sub-break { display: none; }
+          @media (max-width: 560px) { .hero-sub-break { display: block; } }
           @media (max-width: 480px) {
-            .hero-sub { white-space: normal !important; }
             table { font-size: 12px !important; }
             td, th { padding: 8px 10px !important; }
           }
