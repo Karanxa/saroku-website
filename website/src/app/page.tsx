@@ -61,17 +61,20 @@ function HeroSection() {
       </h1>
 
       {/* Subheadline */}
-      <p
+      <div
         className="hero-sub"
         style={{
-          fontSize: "clamp(16px, 2vw, 20px)", color: "var(--muted)",
-          lineHeight: "1.65", maxWidth: "600px", margin: "0 auto 40px",
+          display: "flex", flexDirection: "column", alignItems: "center", gap: "8px",
+          margin: "0 auto 40px", maxWidth: "600px",
         }}
       >
-        Benchmark behavioral drift.{" "}
-        <br className="hero-sub-break" />
-        Block unsafe agent actions at runtime.
-      </p>
+        <p style={{ fontSize: "clamp(15px, 1.8vw, 18px)", color: "var(--muted)", margin: 0, lineHeight: "1.5" }}>
+          Benchmark behavioral drift across 9 safety properties.
+        </p>
+        <p style={{ fontSize: "clamp(15px, 1.8vw, 18px)", color: "var(--muted)", margin: 0, lineHeight: "1.5" }}>
+          Block unsafe agent actions at runtime.
+        </p>
+      </div>
 
       {/* Install command */}
       <div
