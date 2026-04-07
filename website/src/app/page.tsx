@@ -65,7 +65,7 @@ function HeroSection() {
         className="hero-sub"
         style={{
           fontSize: "clamp(16px, 2vw, 20px)", color: "var(--muted)",
-          lineHeight: "1.65", maxWidth: "600px", margin: "0 auto 40px",
+          lineHeight: "1.65", maxWidth: "600px", margin: "0 auto 40px", whiteSpace: "nowrap",
         }}
       >
         Benchmark behavioral drift. Block unsafe agent actions at runtime.
