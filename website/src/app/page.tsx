@@ -94,7 +94,7 @@ function HeroSection() {
         className="hero-tagline"
         style={{ marginTop: "40px", color: "var(--subtle)", fontSize: "13px" }}
       >
-        Open source · MIT · v0.4.0 · OpenAI-compatible · MASK Benchmark (2026)
+        Open source · MIT · v0.4.0 · OpenAI-compatible · Ollama · MASK Benchmark (2026)
       </p>
     </section>
   );
