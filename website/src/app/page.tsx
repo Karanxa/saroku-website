@@ -56,8 +56,8 @@ function HeroSection() {
           maxWidth: "820px", marginLeft: "auto", marginRight: "auto",
         }}
       >
-        Your model&rsquo;s answer is{" "}
-        <span style={{ color: "var(--primary)" }}>your agent&rsquo;s action.</span>
+        Safety check for every{" "}
+        <span style={{ color: "var(--primary)" }}>action your agent takes.</span>
       </h1>
 
       {/* Subheadline */}
@@ -68,7 +68,9 @@ function HeroSection() {
           lineHeight: "1.65", maxWidth: "600px", margin: "0 auto 40px",
         }}
       >
-        Safety check for every action your agent takes.
+        Benchmark behavioral drift.{" "}
+        <br className="hero-sub-break" />
+        Block unsafe agent actions at runtime.
       </p>
 
       {/* Install command */}
