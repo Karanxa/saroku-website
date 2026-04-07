@@ -9,7 +9,7 @@ export default function HeroCTAs() {
         href="/docs"
         className="btn-primary"
         style={{
-          backgroundColor: "var(--primary)",
+          backgroundColor: "var(--primary-h)",
           color: "#FFFFFF",
           padding: "13px 28px",
           borderRadius: "8px",
