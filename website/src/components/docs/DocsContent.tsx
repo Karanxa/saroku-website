@@ -392,8 +392,8 @@ pip install -e ".[dev]"`}
 
       <SubHeading>Setting up API keys</SubHeading>
       <P>
-        saroku uses LiteLLM under the hood, so it supports any provider LiteLLM
-        supports. Set environment variables for the providers you want to use:
+        saroku uses the OpenAI SDK under the hood and supports any OpenAI-compatible
+        provider. Set environment variables for the providers you want to use:
       </P>
       <CodeBlock
         code={`# OpenAI (required for default generator and judge)
@@ -1094,7 +1094,7 @@ function CliReferenceSection() {
 
       <PropTable
         rows={[
-          { prop: "-m, --model", type: "TEXT", description: "Model string. Any LiteLLM identifier: gpt-4o-mini, claude-sonnet-4-6, vertex_ai/gemini-1.5-pro, etc." },
+          { prop: "-m, --model", type: "TEXT", description: "Model string. Any OpenAI-compatible identifier: gpt-4o-mini, claude-sonnet-4-6, gemini/gemini-2.0-flash, etc." },
           { prop: "--benchmark", type: "TEXT", description: "Use a static benchmark instead of generating probes. Use bench-v1 for reproducible, citable results." },
           { prop: "-p, --probes", type: "TEXT", default: "all", description: "Filter by property: sycophancy | honesty | consistency | prompt_injection | trust_hierarchy | corrigibility | minimal_footprint | goal_drift | all" },
           { prop: "--intensity", type: "TEXT", default: "standard", description: "Probe depth: smoke (4/schema) | standard (15/schema) | deep (36/schema) | exhaustive (72/schema)" },
@@ -1501,12 +1501,12 @@ function ArchitectureSection() {
         {
           stage: "ProbeGenerator",
           file: "saroku/generator/generator.py",
-          description: "Calls the generator LLM (via LiteLLM) to instantiate concrete probe conversations from schema templates. Caches results to avoid redundant generation runs.",
+          description: "Calls the generator LLM to instantiate concrete probe conversations from schema templates. Caches results to avoid redundant generation runs.",
         },
         {
           stage: "ModelRunner",
           file: "saroku/runner/runner.py",
-          description: "Sends probe conversations to the target model via LiteLLM. Handles rate limiting, retries, and parallel execution.",
+          description: "Sends probe conversations to the target model. Handles rate limiting, retries, and parallel execution.",
         },
         {
           stage: "JudgeEvaluator",
@@ -1582,7 +1582,7 @@ function ArchitectureSection() {
 │   ├── generator.py          # Probe generation via LLM
 │   └── cache.py              # 7-day SQLite cache
 ├── runner/
-│   └── runner.py             # LiteLLM model execution
+│   └── runner.py             # Model execution
 ├── judge/
 │   ├── evaluator.py          # LLM-as-judge evaluation
 │   └── prompts.py            # Judge prompt templates
@@ -1595,20 +1595,11 @@ function ArchitectureSection() {
         language="bash"
       />
 
-      <SubHeading>LiteLLM integration</SubHeading>
+      <SubHeading>Model compatibility</SubHeading>
       <P>
-        saroku uses{" "}
-        <a
-          href="https://docs.litellm.ai"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: "var(--primary)" }}
-        >
-          LiteLLM
-        </a>{" "}
-        as its model abstraction layer. This means any model string that LiteLLM
-        supports works as a <InlineCode>--model</InlineCode> argument, including
-        OpenAI, Anthropic, Google, Cohere, Mistral, Groq, and any
+        saroku uses the OpenAI SDK as its model abstraction layer. Any
+        OpenAI-compatible model string works as a <InlineCode>--model</InlineCode> argument,
+        including OpenAI, Anthropic, Google, Cohere, Mistral, Groq, and any
         OpenAI-compatible endpoint.
       </P>
     </div>

@@ -89,7 +89,7 @@ function HeroSection() {
         className="hero-tagline"
         style={{ marginTop: "40px", color: "var(--subtle)", fontSize: "13px" }}
       >
-        Open source · MIT License · v0.4.0 · Grounded in MASK Benchmark (2026) research · Works with any LiteLLM-compatible model
+        Open source · MIT License · v0.4.0 · Grounded in MASK Benchmark (2026) research · Works with OpenAI, Anthropic, Google, and any OpenAI-compatible endpoint
       </p>
     </section>
   );
@@ -595,7 +595,7 @@ function HowItWorksSection() {
   const steps = [
     { title: "Load probe schemas",        description: "saroku reads probe schemas that define behavioral test scenarios — topic, domain, pressure strategies, and expected behavioral boundaries." },
     { title: "Generate probe variants",   description: "A generator LLM creates multiple concrete probe conversations: different phrasings, pressure levels, contextual framings. Cached for 7 days." },
-    { title: "Run against target model",  description: "Each probe is sent to the target model via LiteLLM — supports OpenAI, Anthropic, Google Vertex, Cohere, and any OpenAI-compatible endpoint." },
+    { title: "Run against target model",  description: "Each probe is sent to the target model via the OpenAI-compatible client — supports OpenAI, Anthropic, Google Vertex, Cohere, and any OpenAI-compatible endpoint." },
     { title: "Judge responses",           description: "A judge LLM evaluates each response: Did the model capitulate? Maintain its position? Answer consistently across phrasings?" },
     { title: "Compute behavioral scores", description: "Individual judgments aggregate into per-property scores: sycophancy rate, honesty rate, consistency rate — each normalized to [0, 1]." },
     { title: "Compare & report",          description: "Results diff against a saved baseline. Regressions are flagged with delta values. Reports print to stdout or save as JSON for CI artifacts." },
