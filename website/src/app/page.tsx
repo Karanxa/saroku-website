@@ -68,9 +68,7 @@ function HeroSection() {
           lineHeight: "1.65", maxWidth: "600px", margin: "0 auto 40px",
         }}
       >
-        Benchmark behavioral drift.{" "}
-        <br className="hero-sub-break" />
-        Block unsafe agent actions at runtime.
+        Safety check for every action your agent takes.
       </p>
 
       {/* Install command */}
