@@ -242,7 +242,7 @@ function FeaturesSection() {
       threshold: "< 20%",
       color: "var(--danger)",
       tint: "var(--danger-t)",
-      probes: "12 schemas · medical, financial, legal, scientific",
+      probes: "medical, financial, legal, scientific",
       result: "CAVED",
       resultEmoji: "✗",
       messages: [
@@ -259,7 +259,7 @@ function FeaturesSection() {
       threshold: "> 80%",
       color: "var(--warning)",
       tint: "var(--warning-t)",
-      probes: "14 schemas · web, email, docs, DB, code, APIs",
+      probes: "web, email, docs, DB, code, APIs",
       result: "INJECTED",
       resultEmoji: "✗",
       messages: [
@@ -275,7 +275,7 @@ function FeaturesSection() {
       threshold: "> 75%",
       color: "var(--primary)",
       tint: "var(--primary-t)",
-      probes: "4 schemas · operator constraints, user overrides",
+      probes: "operator constraints, user overrides",
       result: "VIOLATED",
       resultEmoji: "✗",
       messages: [
@@ -305,11 +305,11 @@ function FeaturesSection() {
             What saroku Measures
           </p>
           <h2 style={{ fontSize: "clamp(26px, 4vw, 38px)", fontWeight: 700, color: "var(--text)", letterSpacing: "-0.75px", margin: "0 0 16px" }}>
-            Eight behavioral properties, 52+ probes
+            Eight behavioral categories
           </h2>
           <p style={{ color: "var(--muted)", fontSize: "17px", maxWidth: "560px", margin: "0 auto", lineHeight: "1.6" }}>
             These properties shift with every fine-tune, system prompt change, or provider swap.
-            Each card shows a real probe — the red message is where the model fails.
+            Each card shows a real scenario — the red message is where the model fails.
           </p>
         </div>
       </AnimateIn>
@@ -360,7 +360,7 @@ function FeaturesSection() {
       <AnimateIn delay={200}>
         <div style={{ marginTop: "48px" }}>
           <p style={{ textAlign: "center", fontSize: "13px", color: "var(--subtle)", marginBottom: "20px", fontWeight: 500 }}>
-            All 8 behavioral properties across 52+ built-in probe schemas:
+            All 8 behavioral categories covered by saroku:
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "12px" }}>
             {allProperties.map((p) => (
@@ -551,7 +551,7 @@ result = await guard.acheck(action="...", context="...")`}
                 Safety Model Benchmark
               </p>
               <p style={{ color: "var(--muted)", fontSize: "15px", margin: 0 }}>
-                55-probe binary detection — saroku-safety-0.5b vs leading safety classifiers
+                Binary detection across 9 safety categories — saroku-safety-0.5b vs leading safety classifiers
               </p>
             </div>
             <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
@@ -605,9 +605,9 @@ result = await guard.acheck(action="...", context="...")`}
 
 function HowItWorksSection() {
   const steps = [
-    { title: "Load probe schemas",        description: "saroku reads probe schemas that define behavioral test scenarios — topic, domain, pressure strategies, and expected behavioral boundaries." },
-    { title: "Generate probe variants",   description: "A generator LLM creates multiple concrete probe conversations: different phrasings, pressure levels, contextual framings. Cached for 7 days." },
-    { title: "Run against target model",  description: "Each probe is sent to the target model via the OpenAI-compatible client — supports OpenAI, Anthropic, Google Vertex, Cohere, and any OpenAI-compatible endpoint." },
+    { title: "Load test scenarios",       description: "saroku loads behavioral test scenarios that define the category, domain, pressure strategies, and expected behavioral boundaries." },
+    { title: "Generate test variants",    description: "A generator LLM creates multiple concrete conversations: different phrasings, pressure levels, contextual framings. Cached for 7 days." },
+    { title: "Run against target model",  description: "Each scenario is sent to the target model via the OpenAI-compatible client — supports OpenAI, Anthropic, Google Vertex, Cohere, and any OpenAI-compatible endpoint." },
     { title: "Judge responses",           description: "A judge LLM evaluates each response: Did the model capitulate? Maintain its position? Answer consistently across phrasings?" },
     { title: "Compute behavioral scores", description: "Individual judgments aggregate into per-property scores: sycophancy rate, honesty rate, consistency rate — each normalized to [0, 1]." },
     { title: "Compare & report",          description: "Results diff against a saved baseline. Regressions are flagged with delta values. Reports print to stdout or save as JSON for CI artifacts." },
@@ -715,7 +715,7 @@ function ComparisonSection() {
     { feature: "Behavioral baselines & regression diff",values: [true,  false, false, false] },
     { feature: "CI/CD gate (--fail-on-regression)",     values: [true,  true,  true,  false] },
     { feature: "Multi-model comparison",                values: [true,  false, true,  false] },
-    { feature: "52+ pre-built behavioral probes",       values: [true,  false, false, false] },
+    { feature: "9 behavioral safety categories",         values: [true,  false, false, false] },
     { feature: "LLM-as-judge evaluation",               values: [true,  true,  true,  false] },
     { feature: "Capability benchmarking",               values: [false, true,  true,  false] },
   ];

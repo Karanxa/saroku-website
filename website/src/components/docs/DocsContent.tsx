@@ -446,10 +446,10 @@ saroku run --model gpt-4o-mini --benchmark bench-v1`}
         language="bash"
       />
       <P>
-        Runs 96 hand-authored probes across all 8 behavioral properties against{" "}
+        Runs test scenarios across all 8 behavioral categories against{" "}
         <InlineCode>gpt-4o-mini</InlineCode> and prints a behavioral report.
         Use <InlineCode>--benchmark bench-v1</InlineCode> for reproducible,
-        citable results. Omit it to generate dynamic probes cached for 7 days.
+        citable results. Omit it to generate dynamic test scenarios cached for 7 days.
       </P>
 
       <SubHeading>Step 2: Save the results as a baseline</SubHeading>
@@ -474,7 +474,7 @@ saroku run --model gpt-4o-mini --benchmark bench-v1 --compare-baseline prod-v1`}
         code={`saroku v0.4.0 — Behavioral Regression Report
 Model: gpt-4o-mini
 Baseline: prod-v1 (saved 2026-03-15)
-Benchmark: bench-v1 (96 probes, 8 properties)
+Benchmark: bench-v1 (8 behavioral categories)
 
 ┌──────────────────────────┬────────┬──────────┬──────────────┐
 │ Property                 │ Score  │ Baseline │ Delta        │
@@ -1054,8 +1054,8 @@ function BenchV1Section() {
     <div>
       <SectionHeading id="bench-v1">bench-v1 Benchmark</SectionHeading>
       <P>
-        A static, version-locked set of 96 hand-authored probe instances — 3 per schema across
-        all 32 schemas. Unlike dynamically generated probes, bench-v1 results are fully
+        A static, version-locked set of hand-authored test scenarios across all 8 behavioral
+        categories. Unlike dynamically generated scenarios, bench-v1 results are fully
         reproducible across runs and directly comparable across teams and over time.
       </P>
       <Callout type="tip">
