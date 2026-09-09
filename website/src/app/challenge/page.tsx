@@ -3,6 +3,7 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AnimateIn from "@/components/AnimateIn";
+import QuoteCarousel from "@/components/QuoteCarousel";
 import {
   getChallengeData,
   CHALLENGE_PROPERTIES,
@@ -58,9 +59,21 @@ export default async function ChallengePage() {
               curl -fsSL https://saroku.com/install-challenge.sh | sh
             </code>
           </div>
-          <p style={{ fontSize: "16px", fontWeight: 600, color: "var(--text)", margin: "0 0 24px" }}>
+          <p style={{ fontSize: "16px", fontWeight: 600, color: "var(--text)", margin: "0 0 32px" }}>
             Try to break it.
           </p>
+        </AnimateIn>
+
+        <AnimateIn delay={140}>
+          <div style={{ marginBottom: "40px" }}>
+            <p style={{ fontSize: "12px", fontWeight: 600, color: "var(--subtle)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "16px" }}>
+              What AI researchers are actually saying
+            </p>
+            <QuoteCarousel />
+          </div>
+        </AnimateIn>
+
+        <AnimateIn direction="up" delay={100}>
           <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "8px", marginBottom: "28px" }}>
             {["Python 3.10+", "Bring your own LLM API key", "macOS · Linux · Windows (WSL)"].map((badge) => (
               <span
