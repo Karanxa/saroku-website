@@ -4,10 +4,12 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AnimateIn from "@/components/AnimateIn";
 import QuoteCarousel from "@/components/QuoteCarousel";
+import PropertyGrid from "@/components/PropertyGrid";
 import {
   getChallengeData,
   CHALLENGE_PROPERTIES,
   SCENARIOS_PER_PROPERTY,
+  PROPERTY_BRIEFS,
 } from "./ChallengeData";
 
 export const metadata: Metadata = {
@@ -162,27 +164,22 @@ export default async function ChallengePage() {
       {/* ─── Per-property breakdown ────────────────────────────────────── */}
       <section style={{ maxWidth: "1000px", margin: "0 auto", padding: "64px 24px" }}>
         <AnimateIn direction="up">
-          <h2 style={{ fontSize: "clamp(22px, 3.5vw, 30px)", fontWeight: 700, color: "var(--text)", letterSpacing: "-0.5px", textAlign: "center", margin: "0 0 40px" }}>
-            Challenge Set v1 — 48 scenarios, 8 properties
+          <h2 style={{ fontSize: "clamp(22px, 3.5vw, 30px)", fontWeight: 700, color: "var(--text)", letterSpacing: "-0.5px", textAlign: "center", margin: 0 }}>
+            Challenge Set
           </h2>
+          <p style={{ fontSize: "14px", color: "var(--muted)", textAlign: "center", margin: "8px 0 40px" }}>
+            48 scenarios across 8 properties. Click one to see what it tests.
+          </p>
         </AnimateIn>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px" }}>
-          {CHALLENGE_PROPERTIES.map((prop, i) => (
-            <AnimateIn key={prop} delay={i * 40}>
-              <div style={{ backgroundColor: "var(--surface)", border: "1px solid var(--border)", borderRadius: "10px", padding: "18px" }}>
-                <div style={{ fontSize: "14px", fontWeight: 600, color: "var(--text)", marginBottom: "10px" }}>
-                  {PROPERTY_LABELS[prop] ?? prop}
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "13px", color: "var(--muted)" }}>
-                  <span>{SCENARIOS_PER_PROPERTY} scenarios</span>
-                  <span style={{ color: breakdownByProperty[prop] > 0 ? "var(--danger)" : "var(--subtle)", fontWeight: 600 }}>
-                    {breakdownByProperty[prop]} verified break{breakdownByProperty[prop] === 1 ? "" : "s"}
-                  </span>
-                </div>
-              </div>
-            </AnimateIn>
-          ))}
-        </div>
+        <AnimateIn delay={80}>
+          <PropertyGrid
+            properties={CHALLENGE_PROPERTIES}
+            labels={PROPERTY_LABELS}
+            briefs={PROPERTY_BRIEFS}
+            scenariosPerProperty={SCENARIOS_PER_PROPERTY}
+            breakdownByProperty={breakdownByProperty}
+          />
+        </AnimateIn>
       </section>
 
       <Footer />

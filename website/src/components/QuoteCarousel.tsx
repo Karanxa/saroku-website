@@ -133,8 +133,11 @@ export default function QuoteCarousel() {
         <p style={{ fontSize: "16px", color: "var(--text)", lineHeight: "1.6", margin: "0 0 16px", fontStyle: "italic" }}>
           &ldquo;{q.text}&rdquo;
         </p>
-        <p style={{ fontSize: "13px", color: "var(--muted)", margin: 0 }}>
-          <span style={{ fontWeight: 700, color: "var(--text-2)" }}>{q.author}</span> — {q.role}
+        <p style={{ fontSize: "13px", fontWeight: 700, color: "var(--text-2)", margin: "0 0 2px" }}>
+          {q.author}
+        </p>
+        <p style={{ fontSize: "12px", color: "var(--muted)", margin: 0 }}>
+          {q.role}
         </p>
       </div>
     </div>
