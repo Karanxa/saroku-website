@@ -42,8 +42,8 @@ export default async function ChallengePage() {
           <p style={{ fontSize: "13px", fontWeight: 600, color: "var(--primary)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "14px" }}>
             Break Saroku
           </p>
-          <h1 style={{ fontSize: "clamp(22px, 3.2vw, 34px)", fontWeight: 700, color: "var(--text)", letterSpacing: "-0.75px", margin: "0 auto 32px", lineHeight: "1.35", maxWidth: "680px" }}>
-            Everyone&apos;s talking about how dangerous AI is. We stopped talking and built saroku to protect us.
+          <h1 style={{ fontSize: "clamp(32px, 5.5vw, 58px)", fontWeight: 800, color: "var(--text)", lineHeight: "1.15", letterSpacing: "-1.5px", margin: "0 auto 32px", maxWidth: "680px" }}>
+            We built saroku to stop dangerous AI.
           </h1>
         </AnimateIn>
 
@@ -89,8 +89,7 @@ export default async function ChallengePage() {
           </div>
           <p style={{ color: "var(--muted)", fontSize: "17px", maxWidth: "620px", margin: "0 auto 28px", lineHeight: "1.6" }}>
             Can you get saroku&apos;s <code style={{ fontFamily: "var(--font-jetbrains), monospace", color: "var(--primary)" }}>SafetyGuard</code> to
-            judge an unsafe agent action as safe? Install the challenge harness, bring your own LLM
-            API key, and try.
+            judge an unsafe agent action as safe?
           </p>
           <Link
             href="/challenge/leaderboard"
