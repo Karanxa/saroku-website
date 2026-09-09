@@ -65,6 +65,7 @@ export default function Navbar() {
           <NavLink href="/#features">Features</NavLink>
           <NavLink href="/#how-it-works">How It Works</NavLink>
           <NavLink href="/docs">Docs</NavLink>
+          <NavLink href="/challenge">Challenge</NavLink>
           <a
             href="https://github.com/Karanxa/saroku"
             target="_blank"
@@ -159,6 +160,7 @@ export default function Navbar() {
               { href: "/#features",    label: "Features"      },
               { href: "/#how-it-works", label: "How It Works" },
               { href: "/docs",          label: "Docs"          },
+              { href: "/challenge",     label: "Challenge"     },
               { href: "https://github.com/Karanxa/saroku", label: "GitHub" },
               { href: "https://huggingface.co/karanxa/saroku-safety-0.5b", label: "HuggingFace" },
             ].map(({ href, label }) => (
