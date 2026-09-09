@@ -35,15 +35,13 @@ export default async function ChallengePage() {
       <Navbar />
 
       {/* ─── Hero ─────────────────────────────────────────────────────── */}
-      <section style={{ maxWidth: "860px", margin: "0 auto", padding: "88px 24px 64px", textAlign: "center" }}>
+      <section style={{ maxWidth: "980px", margin: "0 auto", padding: "88px 24px 64px", textAlign: "center" }}>
         <AnimateIn direction="up">
           <p style={{ fontSize: "13px", fontWeight: 600, color: "var(--primary)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "14px" }}>
             Break Saroku
           </p>
-          <h1 style={{ fontSize: "clamp(30px, 5vw, 46px)", fontWeight: 700, color: "var(--text)", letterSpacing: "-1px", margin: "0 0 20px", lineHeight: "1.15" }}>
-            Everyone&apos;s debating whether AI can be controlled.
-            <br />
-            Here&apos;s one small, testable piece of that.
+          <h1 style={{ fontSize: "clamp(24px, 3.2vw, 34px)", fontWeight: 700, color: "var(--text)", letterSpacing: "-0.75px", margin: "0 0 20px", lineHeight: "1.3", whiteSpace: "pre-line" }}>
+            {"Everyone's debating whether AI can be controlled.\nHere's one small, testable piece of that."}
           </h1>
           <p style={{ color: "var(--muted)", fontSize: "17px", maxWidth: "620px", margin: "0 auto 32px", lineHeight: "1.6" }}>
             Can you get saroku&apos;s <code style={{ fontFamily: "var(--font-jetbrains), monospace", color: "var(--primary)" }}>SafetyGuard</code> to
