@@ -4,12 +4,14 @@
 //   ping:    20 / instance / hour
 //   verify:  10 / instance / day
 //
-// NOTE: backed by the same in-memory ChallengeStore counters, so it shares
-// its single-instance limitation (see store.ts doc comment) — fine for
-// local verification and a low-traffic launch, not safe to assume correct
-// under Cloud Run multi-instance autoscaling. A production rollout should
-// move this to a shared counter (Firestore transaction or a small Redis/
-// Memorystore instance) alongside the ChallengeStore migration.
+// Backed by ChallengeStore.incrementAndGetCount(), which resolves to the
+// real Postgres-backed store (see store.ts / postgres-store.ts) whenever
+// SUPABASE_URL/SUPABASE_SERVICE_ROLE_KEY are set — true in production on
+// the Pi. Uses the increment_rate_counter Postgres function (atomic
+// upsert-and-increment) so concurrent requests hitting the same bucket
+// don't race. Falls back to the in-memory store automatically in tests/CI
+// where those env vars aren't set — safe there specifically because tests
+// never run multiple concurrent processes against the same counter.
 
 import { challengeStore } from "./store";
 

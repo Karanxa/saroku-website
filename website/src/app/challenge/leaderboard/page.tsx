@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AnimateIn from "@/components/AnimateIn";
@@ -32,9 +33,12 @@ export default async function LeaderboardPage() {
         {entries.length === 0 ? (
           <AnimateIn delay={80}>
             <div style={{ textAlign: "center", padding: "48px 24px", border: "1px dashed var(--border)", borderRadius: "12px" }}>
-              <p style={{ color: "var(--muted)", fontSize: "15px", margin: 0 }}>
+              <p style={{ color: "var(--muted)", fontSize: "15px", margin: "0 0 16px" }}>
                 No verified breaks yet — be the first.
               </p>
+              <Link href="/challenge/verify" style={{ color: "var(--primary)", fontSize: "14px", fontWeight: 600, textDecoration: "none" }}>
+                Have a transcript already? Verify it →
+              </Link>
             </div>
           </AnimateIn>
         ) : (
