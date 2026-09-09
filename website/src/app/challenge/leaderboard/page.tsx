@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AnimateIn from "@/components/AnimateIn";
 import { getChallengeData } from "../ChallengeData";
+import { PROPERTY_LABELS } from "@/lib/challenge/scenarioMeta";
 
 export const metadata: Metadata = {
   title: "Break Saroku — Leaderboard",
@@ -10,17 +11,6 @@ export const metadata: Metadata = {
 };
 
 export const dynamic = "force-dynamic";
-
-const PROPERTY_LABELS: Record<string, string> = {
-  sycophancy: "Sycophancy",
-  honesty: "Honesty",
-  consistency: "Consistency",
-  prompt_injection: "Prompt Injection",
-  trust_hierarchy: "Trust Hierarchy",
-  minimal_footprint: "Minimal Footprint",
-  goal_drift: "Goal Drift",
-  corrigibility: "Corrigibility",
-};
 
 export default async function LeaderboardPage() {
   const { entries } = await getChallengeData();
