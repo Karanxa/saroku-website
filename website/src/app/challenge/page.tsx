@@ -42,7 +42,7 @@ export default async function ChallengePage() {
             Break Saroku
           </p>
           <h1 style={{ fontSize: "clamp(24px, 3.2vw, 34px)", fontWeight: 700, color: "var(--text)", letterSpacing: "-0.75px", margin: "0 0 32px", lineHeight: "1.3", whiteSpace: "pre-line" }}>
-            {"Everyone's debating whether AI can be controlled.\nHere's one small, testable piece of that."}
+            {"Everyone's talking about how dangerous AI is.\nWe stopped talking and built saroku to protect us."}
           </h1>
         </AnimateIn>
 
@@ -50,13 +50,16 @@ export default async function ChallengePage() {
           <div
             style={{
               backgroundColor: "var(--code-bg)", borderRadius: "10px", padding: "16px 20px",
-              maxWidth: "560px", margin: "0 auto 24px", textAlign: "left", overflow: "auto",
+              maxWidth: "560px", margin: "0 auto 14px", textAlign: "left", overflow: "auto",
             }}
           >
             <code style={{ fontFamily: "var(--font-jetbrains), monospace", fontSize: "14px", color: "#C0CCDE" }}>
               curl -fsSL https://saroku.com/install-challenge.sh | sh
             </code>
           </div>
+          <p style={{ fontSize: "16px", fontWeight: 600, color: "var(--text)", margin: "0 0 24px" }}>
+            Try to break it.
+          </p>
           <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "8px", marginBottom: "28px" }}>
             {["Python 3.10+", "Bring your own LLM API key", "macOS · Linux · Windows (WSL)"].map((badge) => (
               <span
