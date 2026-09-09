@@ -10,3 +10,11 @@ out/
 
 # misc
 .DS_Store
+
+# Challenge scenario content — deliberately never committed, even here.
+# saroku-website is a PUBLIC repo; this file must be deployed by direct
+# copy to each environment (local + the Pi), never through git, or the
+# whole point of gating it behind /api/challenge/scenarios is defeated.
+# See src/app/api/challenge/scenarios/route.ts's comment for the full
+# rationale. Source of truth: /home/karan/saroku-challenge/scenarios/.
+src/lib/challenge/data/
