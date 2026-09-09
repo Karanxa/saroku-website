@@ -17,7 +17,12 @@ export default function ChallengePage() {
       <Navbar />
 
       {/* ─── Hero ─────────────────────────────────────────────────────── */}
-      <section style={{ maxWidth: "980px", margin: "0 auto", padding: "88px 24px 96px", textAlign: "center" }}>
+      <section
+        style={{
+          maxWidth: "980px", margin: "0 auto", padding: "48px 24px 64px", textAlign: "center",
+          minHeight: "calc(100dvh - 60px)", display: "flex", flexDirection: "column", justifyContent: "center",
+        }}
+      >
         <AnimateIn direction="up">
           <p style={{ fontSize: "13px", fontWeight: 600, color: "var(--primary)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "14px" }}>
             Break Saroku
